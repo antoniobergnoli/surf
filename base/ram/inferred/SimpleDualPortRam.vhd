@@ -62,33 +62,78 @@ architecture rtl of SimpleDualPortRam is
    constant XST_BRAM_STYLE_C    : string := MEMORY_TYPE_G;
 
    -- Shared memory
-   type mem_type is array ((2**ADDR_WIDTH_G)-1 downto 0) of slv(FULL_DATA_WIDTH_C-1 downto 0);
-   shared variable mem : mem_type := (others => INIT_C);
+   -- type mem_type is array ((2**ADDR_WIDTH_G)-1 downto 0) of slv(FULL_DATA_WIDTH_C-1 downto 0);
+   -- shared variable mem : mem_type := (others => INIT_C);
 
    signal doutBInt : slv(FULL_DATA_WIDTH_C-1 downto 0);
 
    signal weaByteInt : slv(weaByte'range);
 
    -- Attribute for XST (Xilinx Synthesis)
-   attribute ram_style        : string;
-   attribute ram_style of mem : variable is XST_BRAM_STYLE_C;
+   -- attribute ram_style        : string;
+   -- attribute ram_style of mem : variable is XST_BRAM_STYLE_C;
 
-   attribute ram_extract        : string;
-   attribute ram_extract of mem : variable is "TRUE";
+   -- attribute ram_extract        : string;
+   -- attribute ram_extract of mem : variable is "TRUE";
 
-   -- Attribute for Synplicity Synthesizer
-   attribute syn_ramstyle        : string;
-   attribute syn_ramstyle of mem : variable is XST_BRAM_STYLE_C;
+   -- -- Attribute for Synplicity Synthesizer
+   -- attribute syn_ramstyle        : string;
+   -- attribute syn_ramstyle of mem : variable is XST_BRAM_STYLE_C;
 
-   attribute syn_keep        : string;
-   attribute syn_keep of mem : variable is "TRUE";
+   -- attribute syn_keep        : string;
+   -- attribute syn_keep of mem : variable is "TRUE";
 
 begin
 
    weaByteInt <= weaByte when BYTE_WR_EN_G else (others => wea);
 
    -- Port A
-   process(clka)
+   -- process(clka)
+   -- begin
+   --    if rising_edge(clka) then
+   --       if ena = '1' then
+   --          for i in NUM_BYTES_C-1 downto 0 loop
+   --             if (weaByteInt(i) = '1') then
+   --                mem(conv_integer(addra))((i+1)*BYTE_WIDTH_C-1 downto i*BYTE_WIDTH_C) :=
+   --                   resize(dina(minimum(DATA_WIDTH_G-1, (i+1)*BYTE_WIDTH_C-1) downto i*BYTE_WIDTH_C), BYTE_WIDTH_C);
+   --             end if;
+   --          end loop;
+   --       end if;
+   --    end if;
+   -- end process;
+
+   -- -- Port B
+   -- process(clkb)
+   -- begin
+   --    if rising_edge(clkb) then
+   --       if rstb = RST_POLARITY_G then
+   --          doutbInt <= INIT_C after TPD_G;
+   --       elsif enb = '1' then
+   --          doutBInt <= mem(conv_integer(addrb)) after TPD_G;
+   --       end if;
+   --    end if;
+   -- end process;
+
+   -- NO_REG : if (not DOB_REG_G) generate
+   --    doutb <= doutBInt(DATA_WIDTH_G-1 downto 0);
+   -- end generate NO_REG;
+
+   -- REG : if (DOB_REG_G) generate
+   --    process (clkb)
+   --    begin
+   --       if (rising_edge(clkb)) then
+   --          if regceb = '1' then
+   --             doutb <= doutBInt(DATA_WIDTH_G-1 downto 0) after TPD_G;
+   --          end if;
+   --       end if;
+   --    end process;
+   -- end generate REG;
+--
+
+   -- Port A
+   process(clka, clkb)
+     type mem_type is array ((2**ADDR_WIDTH_G)-1 downto 0) of slv(FULL_DATA_WIDTH_C-1 downto 0);
+     variable mem : mem_type := (others => INIT_C);
    begin
       if rising_edge(clka) then
          if ena = '1' then
@@ -100,33 +145,15 @@ begin
             end loop;
          end if;
       end if;
-   end process;
-
-   -- Port B
-   process(clkb)
-   begin
       if rising_edge(clkb) then
-         if rstb = RST_POLARITY_G then
-            doutbInt <= INIT_C after TPD_G;
-         elsif enb = '1' then
-            doutBInt <= mem(conv_integer(addrb)) after TPD_G;
-         end if;
+        if rstb = RST_POLARITY_G then
+          doutbInt <= INIT_C after TPD_G;
+        elsif enb = '1' then
+          doutBInt <= mem(conv_integer(addrb)) after TPD_G;
+        end if;
       end if;
    end process;
 
-   NO_REG : if (not DOB_REG_G) generate
       doutb <= doutBInt(DATA_WIDTH_G-1 downto 0);
-   end generate NO_REG;
-
-   REG : if (DOB_REG_G) generate
-      process (clkb)
-      begin
-         if (rising_edge(clkb)) then
-            if regceb = '1' then
-               doutb <= doutBInt(DATA_WIDTH_G-1 downto 0) after TPD_G;
-            end if;
-         end if;
-      end process;
-   end generate REG;
 
 end rtl;
