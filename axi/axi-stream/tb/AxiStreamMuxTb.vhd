@@ -38,7 +38,7 @@ architecture testbed of AxiStreamMuxTb is
    constant MUX_SIZE_C         : natural          := 4;
 
    -- FIFO configurations
-   constant MEMORY_TYPE_G       : string  := "block";
+   constant MEMORY_TYPE_C       : string  := "block";
    constant CASCADE_SIZE_C      : natural := 1;
    constant FIFO_ADDR_WIDTH_C   : natural := 9;
    constant FIFO_PAUSE_THRESH_C : natural := 2**8;
