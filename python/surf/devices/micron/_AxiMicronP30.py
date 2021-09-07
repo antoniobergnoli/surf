@@ -25,6 +25,7 @@ class AxiMicronP30(pr.Device):
     def __init__(self,
             description = "AXI-Lite Micron P30 PROM",
             tryCount    = 5,
+            hidden      = True,
             **kwargs):
 
         self._useVars = rogue.Version.greaterThanEqual('5.4.0')
@@ -37,6 +38,7 @@ class AxiMicronP30(pr.Device):
         super().__init__(
             description = description,
             size        = size,
+            hidden      = hidden,
             **kwargs)
 
         self._mcs = surf.misc.McsReader()
@@ -72,6 +74,28 @@ class AxiMicronP30(pr.Device):
 
             self.add(pr.RemoteVariable(name='DataRdBus',
                                        offset=0x8,
+                                       base=pr.UInt,
+                                       bitSize=32,
+                                       bitOffset=0,
+                                       retryCount=tryCount,
+                                       updateNotify=False,
+                                       bulkOpEn=False,
+                                       hidden=True,
+                                       verify=False))
+
+            self.add(pr.RemoteVariable(name='TranSize',
+                                       offset=0x80,
+                                       base=pr.UInt,
+                                       bitSize=8,
+                                       bitOffset=0,
+                                       retryCount=tryCount,
+                                       updateNotify=False,
+                                       bulkOpEn=False,
+                                       hidden=True,
+                                       verify=False))
+
+            self.add(pr.RemoteVariable(name='BurstTran',
+                                       offset=0x84,
                                        base=pr.UInt,
                                        bitSize=32,
                                        bitOffset=0,
@@ -319,7 +343,7 @@ class AxiMicronP30(pr.Device):
             # Set the data bus
             self.DataWrBus.set(((cmd&0xFFFF)<< 16) | 0xFF)
             # Set the address
-            self.AddrBus.set(data=addr|0x80000000)
+            self.AddrBus.set(addr|0x80000000)
             # Get the read data
             return self.DataRdBus.get()&0xFFFF
         else:

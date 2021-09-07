@@ -26,6 +26,7 @@ class AxiMicronN25Q(pr.Device):
             description = "AXI-Lite Micron N25Q and Micron MT25Q PROM",
             addrMode    = True, # False = 24-bit Address mode, True = 32-bit Address Mode
             tryCount    = 5,
+            hidden      = True,
             **kwargs):
 
         self._useVars = rogue.Version.greaterThanEqual('5.4.0')
@@ -38,6 +39,7 @@ class AxiMicronN25Q(pr.Device):
         super().__init__(
             description = description,
             size        = size,
+            hidden      = hidden,
             **kwargs)
 
         self._mcs      = surf.misc.McsReader()
@@ -50,53 +52,73 @@ class AxiMicronN25Q(pr.Device):
         ##############################
         if self._useVars:
 
-            self.add(pr.RemoteVariable(name='ModeReg',
-                                       offset=0x04,
-                                       base=pr.UInt,
-                                       bitSize=32,
-                                       bitOffset=0,
-                                       retryCount=tryCount,
-                                       updateNotify=False,
-                                       bulkOpEn=False,
-                                       hidden=True,
-                                       verify=False))
+            self.add(pr.RemoteVariable(
+                name        = 'PasswordLock',
+                offset      = 0x00,
+                base        = pr.UInt,
+                bitSize     = 32,
+                bitOffset   = 0,
+                retryCount  = tryCount,
+                updateNotify= False,
+                bulkOpEn    = False,
+                hidden      = True,
+                verify      = False,
+            ))
 
-            self.add(pr.RemoteVariable(name='AddrReg',
-                                       offset=0x08,
-                                       base=pr.UInt,
-                                       bitSize=32,
-                                       bitOffset=0,
-                                       retryCount=tryCount,
-                                       updateNotify=False,
-                                       bulkOpEn=False,
-                                       hidden=True,
-                                       verify=False))
+            self.add(pr.RemoteVariable(
+                name        = 'ModeReg',
+                offset      = 0x04,
+                base        = pr.UInt,
+                bitSize     = 32,
+                bitOffset   = 0,
+                retryCount  = tryCount,
+                updateNotify= False,
+                bulkOpEn    = False,
+                hidden      = True,
+                verify      = False,
+            ))
 
-            self.add(pr.RemoteVariable(name='CmdReg',
-                                       offset=0x0C,
-                                       base=pr.UInt,
-                                       bitSize=32,
-                                       bitOffset=0,
-                                       retryCount=tryCount,
-                                       updateNotify=False,
-                                       bulkOpEn=False,
-                                       hidden=True,
-                                       verify=False))
+            self.add(pr.RemoteVariable(
+                name        = 'AddrReg',
+                offset      = 0x08,
+                base        = pr.UInt,
+                bitSize     = 32,
+                bitOffset   = 0,
+                retryCount  = tryCount,
+                updateNotify= False,
+                bulkOpEn    = False,
+                hidden      = True,
+                verify      = False,
+            ))
 
-            self.add(pr.RemoteVariable(name='DataReg',
-                                       offset=0x200,
-                                       base=pr.UInt,
-                                       bitSize=32*64,
-                                       bitOffset=0,
-                                       numValues=64,
-                                       valueBits=32,
-                                       valueStride=32,
-                                       retryCount=tryCount,
-                                       updateNotify=False,
-                                       bulkOpEn=False,
-                                       hidden=True,
-                                       verify=False))
+            self.add(pr.RemoteVariable(
+                name        = 'CmdReg',
+                offset      = 0x0C,
+                base        = pr.UInt,
+                bitSize     = 32,
+                bitOffset   = 0,
+                retryCount  = tryCount,
+                updateNotify= False,
+                bulkOpEn    = False,
+                hidden      = True,
+                verify      = False,
+            ))
 
+            self.add(pr.RemoteVariable(
+                name        = 'DataReg',
+                offset      = 0x200,
+                base        = pr.UInt,
+                bitSize     = 32*64,
+                bitOffset   = 0,
+                numValues   = 64,
+                valueBits   = 32,
+                valueStride = 32,
+                retryCount  = tryCount,
+                updateNotify= False,
+                bulkOpEn    = False,
+                hidden      = True,
+                verify      = False,
+            ))
 
         ##############################
         # Constants

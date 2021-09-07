@@ -25,6 +25,7 @@ class AxiMicronMt28ew(pr.Device):
     def __init__(self,
                  description = "AXI-Lite Micron MT28EW PROM",
                  tryCount    = 5,
+                 hidden      = True,
                  **kwargs):
 
         self._useVars = rogue.Version.greaterThanEqual('5.4.0')
@@ -37,6 +38,7 @@ class AxiMicronMt28ew(pr.Device):
         super().__init__(
             description = description,
             size        = size,
+            hidden      = hidden,
             **kwargs)
 
         self._mcs = surf.misc.McsReader()
@@ -337,7 +339,7 @@ class AxiMicronMt28ew(pr.Device):
     def _readFromFlash(self, addr):
         if self._useVars:
             # Set the address
-            self.AddrBus.set(data=addr|0x80000000)
+            self.AddrBus.set(addr|0x80000000)
             # Get the read data
             return self.DataRdBus.get()&0xFFFF
         else:

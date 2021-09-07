@@ -31,14 +31,17 @@ class McsReader():
         self.endAddr   = 0
         self.size      = 0
         self.addrRange = 0
+        self.lastAddr  = 0
 
     def open(self, filename, dbg=False):
         self.startAddr = 0
         self.endAddr   = 0
         self.size      = 0
         self.addrRange = 0
+        self.lastAddr  = 0
         baseAddr       = 0
         idx            = 0
+        firstAddr      = True
 
         # Check for non-compressed .MCS file
         if fnmatch.fnmatch(filename, '*.mcs'):
@@ -115,7 +118,15 @@ class McsReader():
                                 data = hexBytes[j+4]
                                 self.entry[idx] = [address, data]
                                 idx = idx + 1
-
+                                # Check if not the start address
+                                if (address != self.startAddr):
+                                    # Check for non-contiguous address
+                                    if ( address != (self.lastAddr+1) ) and firstAddr is False:
+                                        click.secho('\n non-contiguous address detected: PreviousAddress={:x}, CurrentAddress={:x}'.format(self.lastAddr,address), fg='red')
+                                        raise McsException('McsReader.open(): failed')
+                                    else:
+                                        self.lastAddr = address
+                                        firstAddr     = False
                             # Save the last address
                             self.endAddr = address
 
@@ -136,6 +147,7 @@ class McsReader():
                             # Check for first address index (which is always the first line)
                             if (i==0):
                                 self.startAddr = baseAddr
+                                self.lastAddr  = baseAddr
                         else: # Undefined RecordType
                             click.secho('\nInvalid record type: {:d}'.format(recordType), fg='red')
                             raise McsException('McsReader.open(): failed')
