@@ -32,6 +32,7 @@ entity SimpleDualPortRam is
       ADDR_WIDTH_G   : integer range 1 to (2**24) := 4;
       INIT_G         : slv                        := "0");
    port (
+    ecc_error : out sl;
       -- Port A
       clka    : in  sl                                                    := '0';
       ena     : in  sl                                                    := '1';
@@ -78,6 +79,8 @@ architecture rtl of SimpleDualPortRam is
    -- -- Attribute for Synplicity Synthesizer
    -- attribute syn_ramstyle        : string;
    -- attribute syn_ramstyle of mem : variable is XST_BRAM_STYLE_C;
+  --attribute syn_ramstyle of mem : variable is "ecc";
+  attribute syn_ramstyle of mem : variable is "lsram";
 
    -- attribute syn_keep        : string;
    -- attribute syn_keep of mem : variable is "TRUE";
