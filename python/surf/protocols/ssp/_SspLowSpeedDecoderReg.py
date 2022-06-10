@@ -44,6 +44,17 @@ class SspLowSpeedDecoderReg(pr.Device):
             pollInterval = 1,
         )
 
+        self.addRemoteVariables(
+            name         = 'EyeWidth',
+            description  = 'Measured eye width after locking completed',
+            offset       = 0x200,
+            bitSize      = 9,
+            mode         = 'RO',
+            number       = numberLanes,
+            stride       = 4,
+            pollInterval = 1,
+        )
+
         self.add(pr.RemoteVariable(
             name         = 'Locked',
             offset       = 0x400,
@@ -51,6 +62,15 @@ class SspLowSpeedDecoderReg(pr.Device):
             mode         = 'RO',
             pollInterval = 1,
         ))
+
+        self.addRemoteVariables(
+            name         = 'UsrDlyCfg',
+            offset       = 0x500,
+            bitSize      = 9,
+            mode         = 'RW',
+            number       = numberLanes,
+            stride       = 4,
+        )
 
         self.addRemoteVariables(
             name         = 'DlyConfig',
@@ -88,13 +108,16 @@ class SspLowSpeedDecoderReg(pr.Device):
             mode         = 'RW',
         ))
 
-        self.add(pr.RemoteVariable(
-            name         = 'UsrDlyCfg',
-            description  = 'User delay config',
-            offset       = 0x804,
-            bitSize      = 9,
-            mode         = 'RW',
-        ))
+#####################################
+# Changed from "common" to 1 per lane
+#####################################
+#        self.add(pr.RemoteVariable(
+#            name         = 'UsrDlyCfg',
+#            description  = 'User delay config',
+#            offset       = 0x804,
+#            bitSize      = 9,
+#            mode         = 'RW',
+#        ))
 
         self.add(pr.RemoteVariable(
             name         = 'MinEyeWidth',
