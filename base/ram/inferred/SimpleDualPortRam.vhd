@@ -80,7 +80,7 @@ architecture rtl of SimpleDualPortRam is
    -- attribute syn_ramstyle        : string;
    -- attribute syn_ramstyle of mem : variable is XST_BRAM_STYLE_C;
   --attribute syn_ramstyle of mem : variable is "ecc";
-  attribute syn_ramstyle of mem : variable is "lsram";
+--  attribute syn_ramstyle of mem : variable is "lsram";
 
    -- attribute syn_keep        : string;
    -- attribute syn_keep of mem : variable is "TRUE";
