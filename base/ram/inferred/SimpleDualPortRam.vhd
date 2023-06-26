@@ -24,6 +24,7 @@ entity SimpleDualPortRam is
    generic (
       TPD_G          : time                       := 1 ns;
       RST_POLARITY_G : sl                         := '1';  -- '1' for active high rst, '0' for active low
+      RST_ASYNC_G    : boolean                    := false;
       MEMORY_TYPE_G  : string                     := "block";
       DOB_REG_G      : boolean                    := false;  -- Extra reg on doutb (folded into BRAM)
       BYTE_WR_EN_G   : boolean                    := false;
@@ -87,49 +88,7 @@ begin
    weaByteInt <= weaByte when BYTE_WR_EN_G else (others => wea);
 
    -- Port A
-   -- process(clka)
-   -- begin
-   --    if rising_edge(clka) then
-   --       if ena = '1' then
-   --          for i in NUM_BYTES_C-1 downto 0 loop
-   --             if (weaByteInt(i) = '1') then
-   --                mem(conv_integer(addra))((i+1)*BYTE_WIDTH_C-1 downto i*BYTE_WIDTH_C) :=
-   --                   resize(dina(minimum(DATA_WIDTH_G-1, (i+1)*BYTE_WIDTH_C-1) downto i*BYTE_WIDTH_C), BYTE_WIDTH_C);
-   --             end if;
-   --          end loop;
-   --       end if;
-   --    end if;
-   -- end process;
-
-   -- -- Port B
-   -- process(clkb)
-   -- begin
-   --    if rising_edge(clkb) then
-   --       if rstb = RST_POLARITY_G then
-   --          doutbInt <= INIT_C after TPD_G;
-   --       elsif enb = '1' then
-   --          doutBInt <= mem(conv_integer(addrb)) after TPD_G;
-   --       end if;
-   --    end if;
-   -- end process;
-
-   -- NO_REG : if (not DOB_REG_G) generate
-   --    doutb <= doutBInt(DATA_WIDTH_G-1 downto 0);
-   -- end generate NO_REG;
-
-   -- REG : if (DOB_REG_G) generate
-   --    process (clkb)
-   --    begin
-   --       if (rising_edge(clkb)) then
-   --          if regceb = '1' then
-   --             doutb <= doutBInt(DATA_WIDTH_G-1 downto 0) after TPD_G;
-   --          end if;
-   --       end if;
-   --    end process;
-   -- end generate REG;
---
-
-   -- Port A
+ 
    process(clka, clkb)
      type mem_type is array ((2**ADDR_WIDTH_G)-1 downto 0) of slv(FULL_DATA_WIDTH_C-1 downto 0);
      variable mem : mem_type := (others => INIT_C);
