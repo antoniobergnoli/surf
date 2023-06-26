@@ -1,3 +1,15 @@
+## How to sync with upstream
+
+```
+# Add a new remote upstream repository
+git remote add upstream https://github.com/ORIGINAL_OWNER/ORIGINAL_REPOSITORY.git
+
+# Sync your fork
+git fetch upstream
+git checkout master
+git merge upstream/master
+```
+
 # SURF
 
 SLAC Ultimate RTL Framework
