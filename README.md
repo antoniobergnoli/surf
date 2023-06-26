@@ -2,7 +2,7 @@
 
 ```
 # Add a new remote upstream repository
-git remote add upstream https://github.com/ORIGINAL_OWNER/ORIGINAL_REPOSITORY.git
+git remote add upstream https://github.com/slaclab/surf.git
 
 # Sync your fork
 git fetch upstream
