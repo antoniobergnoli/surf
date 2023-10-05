@@ -57,7 +57,6 @@ entity AxiStreamFifo is
     SLAVE_AXI_CONFIG_G  : AxiStreamConfigType;
     MASTER_AXI_CONFIG_G : AxiStreamConfigType);
   port (
-    ecc_error   : out sl;
     -- Slave Port
     sAxisClk    : in  sl;
     sAxisRst    : in  sl;
@@ -448,7 +447,6 @@ begin
       EMPTY_THRES_G      => 1
       )
     port map (
-      ecc_error     => ecc_error,
       rst           => sAxisRst,
       wr_clk        => sAxisClk,
       wr_en         => fifoWrite,

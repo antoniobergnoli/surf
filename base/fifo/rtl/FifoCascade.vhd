@@ -42,7 +42,6 @@ entity FifoCascade is
     FULL_THRES_G       : integer range 1 to (2**24) := 1;
     EMPTY_THRES_G      : integer range 1 to (2**24) := 1);
   port (
-    ecc_error     : out sl;
     -- Resets
     rst           : in  sl := '0';
     --Write Ports (wr_clk domain)
@@ -114,7 +113,6 @@ begin
         FULL_THRES_G    => FULL_THRES_G,
         EMPTY_THRES_G   => EMPTY_THRES_G)
       port map (
-        ecc_error     => ecc_error,
         -- Resets
         rst           => rst,
         --Write Ports (wr_clk domain)
@@ -167,7 +165,6 @@ begin
         FULL_THRES_G    => FULL_THRES_G,
         EMPTY_THRES_G   => EMPTY_THRES_G)
       port map (
-        ecc_error     => ecc_error,
         -- Resets
         rst           => rst,
         --Write Ports (wr_clk domain)
