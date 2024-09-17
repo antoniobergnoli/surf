@@ -83,7 +83,6 @@ begin
          FifoAsync_Inst : entity surf.FifoAsync
             generic map (
                TPD_G          => TPD_G,
-               RST_ASYNC_G    => RST_ASYNC_G,
                RST_POLARITY_G => RST_POLARITY_G,
                MEMORY_TYPE_G  => MEMORY_TYPE_G,
                FWFT_EN_G      => FWFT_EN_G,
